@@ -1,4 +1,4 @@
-/*
+/**
 * author: Josué - Aluno 19553
 * email: a19553@alunos.ipca.pt
 * date: 31-03-2022
@@ -7,19 +7,13 @@
 
 #pragma once
 
+#pragma warning( disable : 4996 )
+//Evita a utilização do _CRT_SECURE_NO_WARNINGS, desactiva avisos de segurança na compilação
+
 #pragma region Includes
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "DataStructure.h"
+#include "Definitions.h"
 #pragma endregion
 
-#pragma region Assinaturas
-char* get_desc_processplan(char* job);
-char* get_desc_operation(int codigo);
-char* get_desc_machine(int codigo);
-#pragma endregion
 
 #pragma region Funções_View_Jobs
 /**
@@ -33,7 +27,7 @@ char* get_desc_machine(int codigo);
 char* view_min_job(Process* grid, char* job, char* resultado)
 {
 
-	int valor = 0;
+	/*int valor = 0;
 	int min = 99;
 	char res_fun[50];
 	char res_tmp_pln[50];
@@ -109,7 +103,7 @@ char* view_min_job(Process* grid, char* job, char* resultado)
 			strcat(resultado, "\n");
 		}
 		jb_temp = jb_temp->next_job;
-	}
+	}*/
 
 	return resultado;
 }
@@ -125,7 +119,7 @@ char* view_min_job(Process* grid, char* job, char* resultado)
 char* view_max_job(Process* grid, char* job, char* resultado)
 {
 
-	int valor = 0;
+	/*int valor = 0;
 	int max = 0;
 	char res_fun[50];
 	char res_tmp_pln[50];
@@ -203,7 +197,7 @@ char* view_max_job(Process* grid, char* job, char* resultado)
 		
 
 		jb_temp = jb_temp->next_job;
-	}
+	}*/
 
 
 
@@ -221,7 +215,7 @@ char* view_max_job(Process* grid, char* job, char* resultado)
 char* view_avg_job(Process* grid, char* job, char* resultado)
 {
 
-	char res_fun[50];
+	/*char res_fun[50];
 	char res_tmp_pln[90];
 	char res_tmp_opr[90];
 	char res_tmp_mch[90];
@@ -297,7 +291,7 @@ char* view_avg_job(Process* grid, char* job, char* resultado)
 
 		}
 		jb_temp = jb_temp->next_job;
-	}
+	}*/
 
 	return resultado;
 }
@@ -321,7 +315,7 @@ char* get_desc_processplan(char* job)
 		table_process_plan_table = table_process_plan_table->next_process;
 	}
 	
-	return"N/A";
+	return NULL;
 }
 /**
 * @brief Função que devolve a descricao de um determinada operação
@@ -342,7 +336,7 @@ char* get_desc_operation(int codigo)
 		table_operations_table = table_operations_table->next_operation;
 	}
 
-	return""; 
+	return NULL;
 }
 /**
 * @brief Função que devolve a descricao de uma determinada maquina
@@ -375,7 +369,7 @@ char* get_desc_machine(int codigo)
 		}
 		table_machine = table_machine->next_machine;
 	}
-	return""; 
+	return NULL;
 }
 
 #pragma endregion

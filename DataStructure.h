@@ -7,6 +7,8 @@
 
 #pragma once
 
+#ifndef ESTRUTURAS
+
 #pragma region Data_Models_(Structs)
 
 typedef struct process {
@@ -17,15 +19,40 @@ typedef struct process {
 
 typedef struct operation {
 	int codigo;
-	struct machine* machine;
+	struct binmachine* machine;
 	struct operation* next_operation;
 }Operation;
 
-typedef struct machine {
+// JR: 19553 : May 2022
+// Old code Phase 1
+// this was replaced by the new struct to create a binary tree
+// check struct binmachine
+//
+// 
+//
+//typedef struct machine {
+//	int codigo;
+//	int tempo;
+//	struct machine* next_machine;
+//}Machine;
+
+
+// JR: 19553 : May 2022
+//
+// New struct
+// Binary tree by time
+// ( in order to easily check the best path )
+//
+
+typedef struct binmachine
+{
 	int codigo;
 	int tempo;
-	struct machine* next_machine;
-}Machine;
+	struct binmachine* binmachine_more;
+	struct binmachine* binmachine_less;
+
+}Bin_Machine;
+
 
 /*
 Estas tabelas são tabelas de suporte para carregamento de dados informativos sobre:
@@ -69,3 +96,6 @@ typedef struct processplan_table {
 }ProcessPlan_Table;
 
 #pragma endregion
+
+#define ESTRUTURAS 1
+#endif 

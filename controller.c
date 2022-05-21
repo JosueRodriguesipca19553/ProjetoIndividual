@@ -1,4 +1,4 @@
-/*
+/**
 * author: Josué - Aluno 19553
 * email: a19553@alunos.ipca.pt
 * date: 31-03-2022
@@ -7,13 +7,11 @@
 
 #pragma once
 
+#pragma warning( disable : 4996 )
+//Evita a utilização do _CRT_SECURE_NO_WARNINGS, desactiva avisos de segurança na compilação
+
 #pragma region Includes
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "model.c"
-#include "view.c"
-#include "DataStructure.h"
+#include "Definitions.h"
 #pragma endregion
 
 #pragma region Funções_Operações
@@ -34,7 +32,7 @@ Operations_Table* newoperation(Operations_Table* table, int codigo, char* descri
 	if (tipoadd == 0)
 	{ 
 		//
-		// Estando já criada a função de adição para o carregamento (model.h) , foi reutilizada essa
+		// Estando já criada a função de adição para o carregamento (model.c) , foi reutilizada essa
 		//
 		table = add_record_operation_table(table, record);
 	}
@@ -134,5 +132,7 @@ Operations_Table* removeoperation(Operations_Table* table, int codigo)
 
 	return table;
 }
+
+
 
 #pragma endregion

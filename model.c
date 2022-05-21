@@ -1,4 +1,4 @@
-/*
+/**
 * author: Josué - Aluno 19553
 * email: a19553@alunos.ipca.pt
 * date: 31-03-2022
@@ -7,13 +7,13 @@
 
 #pragma once
 
+#pragma warning( disable : 4996 )
+//Evita a utilização do _CRT_SECURE_NO_WARNINGS, desactiva avisos de segurança na compilação
+
 #pragma region Includes
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "DataStructure.h"
+#include "Definitions.h"
 #pragma endregion
+
 
 #pragma region Funções_LOAD_Machine_Type_(Table)
 /**
@@ -479,99 +479,20 @@ Operation* load_record_operation(int codigo)
 * @return Registo preenchido
 */
 
-Machine* load_record_machine(int codigo, int time)
+Bin_Machine* load_record_machine(int codigo, int time)
 {
-	Machine* record = (Machine*)malloc(sizeof(Machine));
+	Bin_Machine* record = (Bin_Machine*)malloc(sizeof(Bin_Machine));
 
 	if (record == NULL) return NULL;
 
 	record->codigo = codigo;
 	record->tempo= time;
-	record->next_machine= NULL;
+	record->binmachine_less= NULL;
+	record->binmachine_more = NULL;
 
 	return record;
 }
 
-/**
-* @brief Função que preenche a grelha com base numa linha do ficheiro de texto
-* @param [St]   Grid     : Grelha que esta a ser preenchida 
-* @param [St]   Processo : Registo do processo que queremos adicionar
-* @param [Int]  Operação : Codigo da operação
-* @param [Int]  Maquina  : Codigo da maquina
-* @param [Int]  Tempo    : Tempo da maquina
-* @return Grelha Preenchida
-*/
-
-Process* add_record_processplan(Process* grid, Process* record, int operation, int machine, int time)
-{
-	
-	Operation* op_record = NULL;
-	op_record = load_record_operation(operation); // gera o registo para as linhas das dimensões
-
-	Machine* machine_record = NULL;
-	machine_record = load_record_machine(machine, time); // gera o registo para as linhas maquina ( 3 dimenção da grelha )
-
-	if (exist_processplan(grid, record->codigo)==false)
-	{
-		if (grid == NULL)
-		{
-			grid = record;
-			grid->operacao = op_record;
-			grid->operacao->machine = machine_record;
-		}
-		else
-		{
-			Process* aux = grid;
-			while (aux->next_job!= NULL)
-			{
-				aux = aux->next_job;
-			}
-			aux->next_job = record;
-			aux->next_job->operacao= op_record;
-			aux->next_job->operacao->machine = machine_record;
-		}
-	}
-	else
-	{
-		Process* aux_op = grid;
-		while (strcmp(aux_op->codigo,record->codigo)!=0)
-		{
-			aux_op = aux_op->next_job;
-		}
-		if (exist_operation(aux_op->operacao, operation) == false)
-		{
-			Operation* aux = aux_op->operacao;
-			while (aux->next_operation!= NULL)
-			{
-				aux = aux->next_operation;
-			}
-			aux->next_operation = op_record;
-			aux->next_operation->machine = machine_record;
-		}
-		else
-		{
-			Process* aux_op = grid;
-			while (strcmp(aux_op->codigo, record->codigo) != 0)
-			{
-				aux_op = aux_op->next_job;
-			}
-			Operation* aux = aux_op ->operacao;
-			while (aux->next_operation != NULL)
-			{
-				aux = aux->next_operation;
-			}
-			Machine* aux_m = aux->machine;
-			while (aux_m->next_machine != NULL)
-			{
-				aux_m = aux_m->next_machine;
-			}
-			aux_m->next_machine= machine_record;
-
-		}
-	}
-
-	return grid;
-}
 
 /**
 * @brief Função que carrega a informação de um processo para um registo
@@ -604,7 +525,6 @@ Process* Load_Grid()
 	const char separador[2] = ";";
 	int i = 0;
 	Process* grid = NULL;
-	Process* record = NULL;
 
 	FILE* fp;
 	fp = fopen("griddata.dat", "rt");
@@ -616,8 +536,7 @@ Process* Load_Grid()
 		readline[2] = strtok(NULL, separador);
 		readline[3] = strtok(NULL, separador);
 
-		record = load_record_processplan(readline[0]); // gera o registo para a primeira coluna da grelha
-		grid = add_record_processplan(grid, record, atoi(readline[1]), atoi(readline[2]), atoi(readline[3])); // popula a grelha
+		grid = add_record_processplan(grid, readline[0], atoi(readline[1]), atoi(readline[2]), atoi(readline[3])); // popula a grelha
 		
 	}
 	fclose(fp);
@@ -628,3 +547,157 @@ Process* Load_Grid()
 
 #pragma endregion
 
+
+/**
+* @brief Função que preenche a grelha com base numa linha do ficheiro de texto
+* @param [St]   Grid     : Grelha que esta a ser preenchida
+* @param [St]   Processo : Codigo do processo que queremos adicionar
+* @param [Int]  Operação : Codigo da operação
+* @param [Int]  Maquina  : Codigo da maquina
+* @param [Int]  Tempo    : Tempo da maquina
+* @return Grelha Preenchida
+*/
+Process* add_record_processplan(Process* grid, char* job, int operation, int machine, int time)
+{
+	Process* record = NULL;
+	record = load_record_processplan(job); // gera o registo para o job
+
+	Operation* op_record = NULL;
+	op_record = load_record_operation(operation); // gera o registo para a operação
+
+	Bin_Machine* machine_record = NULL;
+	machine_record = load_record_machine(machine, time); // gera o registo para as maquinas
+
+	grid = add_job(grid, record);
+
+	grid = add_process(grid, job, op_record);
+
+	grid = add_machine(grid, job, operation, machine_record);
+
+	return grid;
+}
+
+Bin_Machine* add_machine_tree(Bin_Machine* tree, Bin_Machine* machine)
+{
+	Bin_Machine* aux = tree;
+
+	if (aux == NULL)
+	{
+		aux = machine;
+	}
+	else
+	{
+		if (machine->codigo > aux->codigo)
+		{
+			if (aux->binmachine_more == NULL)
+			{
+				aux->binmachine_more = machine;
+			}
+			else
+			{
+				aux = add_machine_tree(aux->binmachine_more, machine);
+			}
+		}
+		if (machine->codigo < aux->codigo)
+		{
+			if (aux->binmachine_less == NULL)
+			{
+				aux->binmachine_less = machine;
+			}
+			else
+			{
+				aux = add_machine_tree(tree->binmachine_less, machine);
+			}
+		}
+	}
+
+	return tree;
+}
+
+Process* add_job(Process* grid, Process* record)
+{
+	if (exist_processplan(grid, record->codigo) == false)
+	{
+		if (grid == NULL)
+		{
+			grid = record;
+			grid->operacao = NULL;
+			//grid->operacao->machine = NULL;
+		}
+		else
+		{
+			Process* aux = grid;
+			while (aux->next_job != NULL)
+			{
+				aux = aux->next_job;
+			}
+			aux->next_job = record;
+			aux->next_job->operacao = NULL;
+			//aux->next_job->operacao->machine = NULL;
+		}
+	}
+	return grid;
+}
+
+Process* add_process(Process* grid, char* job, Operation* op_record)
+{
+	Process* aux_op = grid;
+	while (strcmp(aux_op->codigo, job) != 0)
+	{
+		aux_op = aux_op->next_job;
+	}
+	if (exist_operation(aux_op->operacao, op_record->codigo) == false)
+	{
+		Operation* aux = aux_op->operacao;
+		if (aux == NULL)
+		{
+			aux = op_record;
+			aux->machine = NULL;
+			aux->next_operation = NULL;
+		}
+		else
+		{
+			while (aux->next_operation != NULL)
+			{
+				aux = aux->next_operation;
+			}
+			aux->next_operation = op_record;
+			aux->next_operation->machine = NULL;
+		}
+		aux_op->operacao = aux;
+	}
+	
+	return aux_op;
+}
+
+Process* add_machine(Process* grid, char* job, int operation, Bin_Machine* machine_record)
+{
+	Process* aux_jb = grid;
+	while (strcmp(aux_jb->codigo, job) != 0)
+	{
+		aux_jb = aux_jb->next_job;
+	}
+	Operation* aux_op = aux_jb->operacao;
+	while (aux_op->codigo != operation)
+	{
+		aux_op = aux_op->next_operation;
+	}
+
+	// Begin binary tree machines
+
+	Bin_Machine* tree = aux_op->machine;
+
+	if (tree == NULL)
+	{
+		tree = machine_record;
+	}
+	else
+	{
+		tree = add_machine_tree(tree, machine_record);
+	}
+	
+	aux_op->machine = tree;
+	aux_jb->operacao = aux_op;
+
+	return grid;
+}

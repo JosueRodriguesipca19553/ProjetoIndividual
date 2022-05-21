@@ -15,16 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="controller.c">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="model.c">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="view.c">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="DataStructure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Definitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -49,6 +43,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="model.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testes.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="view.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

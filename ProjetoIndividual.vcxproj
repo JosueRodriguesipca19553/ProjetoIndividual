@@ -20,12 +20,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="testes.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="controller.c" />
+    <ClCompile Include="controller.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
     <ClInclude Include="DataStructure.h" />
-    <ClInclude Include="model.c" />
-    <ClInclude Include="view.c" />
+    <ClInclude Include="Definitions.h" />
+    <ClCompile Include="model.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="view.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="griddata.dat" />
