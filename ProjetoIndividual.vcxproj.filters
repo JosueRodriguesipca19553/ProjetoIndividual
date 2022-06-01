@@ -57,5 +57,11 @@
     <ClCompile Include="view.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="listagem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="escalation.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

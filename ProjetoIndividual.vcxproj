@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="escalation.c" />
+    <ClCompile Include="listagem.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="testes.c">
       <FileType>CppCode</FileType>
