@@ -1,11 +1,9 @@
 /**
 * author: Josué - Aluno 19553
 * email: a19553@alunos.ipca.pt
-* date: 31-03-2022
-* desc: Main
+* date: 31-05-2022
+* desc: Modulo de Testes Unitários
 */
-
-#pragma once
 
 #pragma warning( disable : 4996 )
 //Evita a utilização do _CRT_SECURE_NO_WARNINGS, desactiva avisos de segurança na compilação
@@ -145,60 +143,43 @@ bool test_delete_list()
 /***********************************************************************************************************************************************************************/
 bool test_valormin()
 {
-    char* cptr;
+    int min;
     bool pass = false;
-    char resultado[10000];
+    
 
     Process* grid = NULL;
     grid = Load_Grid();
 
-    strcpy(resultado, view_min_job(grid, "PF1.1", resultado));
-    cptr = strstr(resultado, "Tempo Total:");
-
-    if (strcmp(cptr, "Tempo Total:17\n") == 0)
-    {
-        pass = true;
-    }
+    min = min_operation(grid, "PF1.1", 1);
+    if (min == 4) pass = true;
 
     return pass;
 }
 /***********************************************************************************************************************************************************************/
 bool test_valormax()
 {
-    char* cptr;
+    int max;
     bool pass = false;
-    char resultado[10000];
-
+    
     Process* grid = NULL;
     grid = Load_Grid();
 
-    strcpy(resultado, view_max_job(grid, "PF6.3", resultado));
-    cptr = strstr(resultado, "Tempo Total:");
-
-    if (strcmp(cptr, "Tempo Total:23\n") == 0)
-    {
-        pass = true;
-    }
+    max = max_operation(grid, "PF1.1", 1);
+    if (max == 5) pass = true;
 
     return pass;
 }
 /***********************************************************************************************************************************************************************/
 bool test_valormedio()
 {
-    char* cptr;
+    float avg;
     bool pass = false;
-    char resultado[10000];
-
+    
     Process* grid = NULL;
     grid = Load_Grid();
 
-    strcpy(resultado, view_avg_job(grid, "PF7.2", resultado));
-    cptr = strstr(resultado, "Total Average :");
-
-    if (strcmp(cptr, "Total Average :4,2\n") == 0)
-    {
-        pass = true;
-    }
+    avg = avg_operation(grid, "PF1.1", 1);
+    if (avg == 4,97)pass = true;
 
     return pass;
 }
@@ -208,36 +189,36 @@ int UnitTests()
     bool pass = false;
     /********************************************************************************************/
     pass = test_add_list();
-    if (pass == true) { printf("Teste adiciona item lista - PASS\n"); }
-    else { printf("Teste adiciona item lista - NOT PASS\n"); }
+    if (pass == true) { printf("OK - Teste adiciona item lista\n"); }
+    else { printf("KO - Teste adiciona item lista\n"); }
     /********************************************************************************************/
     pass = test_add_list_middle();
-    if (pass == true) { printf("Teste adiciona item no meio da lista - PASS\n"); }
-    else { printf("Teste adiciona item no meio da lista - NOT PASS\n"); }
+    if (pass == true) { printf("OK - Teste adiciona item no meio da lista\n"); }
+    else { printf("KO - Teste adiciona item no meio da lista\n"); }
     /********************************************************************************************/
     pass = test_alt_list();
-    if (pass == true) { printf("Teste altera item na lista - PASS\n"); }
-    else { printf("Teste altera item na lista - NOT PASS\n"); }
+    if (pass == true) { printf("OK - Teste altera item na lista\n"); }
+    else { printf("KO - Teste altera item na lista\n"); }
     /********************************************************************************************/
     pass = test_delete_list_middle();
-    if (pass == true) { printf("Teste remove item no meio da lista - PASS\n"); }
-    else { printf("Teste remove item no meio da lista - NOT PASS\n"); }
+    if (pass == true) { printf("OK - Teste remove item no meio da lista\n"); }
+    else { printf("KO - Teste remove item no meio da lista\n"); }
     /********************************************************************************************/
     pass = test_delete_list();
-    if (pass == true) { printf("Teste remove item na lista - PASS\n"); }
-    else { printf("Teste remove item na lista - NOT PASS\n"); }
+    if (pass == true) { printf("OK - Teste remove item na lista\n"); }
+    else { printf("KO - Teste remove item na lista\n"); }
     /********************************************************************************************/
     pass = test_valormin();
-    if (pass == true) { printf("Teste valor min- PASS\n"); }
-    else { printf("Teste valor min - NOT PASS\n"); }
+    if (pass == true) { printf("OK - Teste valor min\n"); }
+    else { printf("KO - Teste valor min\n"); }
     /********************************************************************************************/
     pass = test_valormax();
-    if (pass == true) { printf("Teste valor max - PASS\n"); }
-    else { printf("Teste valor max - NOT PASS\n"); }
+    if (pass == true) { printf("OK - Teste valor max\n"); }
+    else { printf("KO - Teste valor max\n"); }
     /********************************************************************************************/
     pass = test_valormedio();
-    if (pass == true) { printf("Teste valor medio - PASS\n"); }
-    else { printf("Teste valor medio - NOT PASS\n"); }
+    if (pass == true) { printf("OK - Teste valor medio\n"); }
+    else { printf("KO - Teste valor medio\n"); }
     /********************************************************************************************/
 
     printf("\n");

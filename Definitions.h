@@ -1,7 +1,7 @@
 /*
 * author: Josué - Aluno 19553
 * email: a19553@alunos.ipca.pt
-* date: 21-05-2022
+* date: 31-05-2022
 * desc: Assinaturas das Funções
 */
 
@@ -63,6 +63,28 @@ char* view_avg_job(Process* grid, char* job, char* resultado);
 char* get_desc_processplan(char* job);
 char* get_desc_operation(int codigo);
 char* get_desc_machine(int codigo);
+
+int listagens(Process* grid);
+
+void initvar();
+int indexhash(char* codigo);
+int addhash(Process* record);
+int createkey(char* codigo);
+
+int getlessmachinetime(Bin_Machine * machine, int min);
+int getmoremachinetime(Bin_Machine* machine, int max);
+float getavgmachinetime(Bin_Machine* machine, float avg);
+
+int min_operation(Process* grid, char* job, int operation);
+int max_operation(Process* grid, char* job, int operation);
+float avg_operation(Process* grid, char* job, int operation);
+
+void schedule_job_operation(Process* grid, char* job, int operation);
+void create_process_plan();
+
+Bin_Machine* get_machine_job_op(Process* grid, char* job, int operation);
+void get_machine_job(Bin_Machine* temp);
+
 
 #define ASSINATURAS 1
 #endif 

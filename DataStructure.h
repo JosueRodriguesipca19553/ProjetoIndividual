@@ -1,7 +1,7 @@
 /*
 * author: Josué - Aluno 19553
 * email: a19553@alunos.ipca.pt
-* date: 31-03-2022
+* date: 31-05-2022
 * desc: Estrutura de Dados
 */
 
@@ -11,8 +11,19 @@
 
 #pragma region Data_Models_(Structs)
 
+#define SIZE 100
+#define HASHMAX 31
+#define CODIGO 10
+#define DESCRICAO 50
+#define MAQUINAS 8
+#define TIMESLOTS 24
+#define MAXOP 10
+#define MAXLINE 100
+#define MAXFILE 30000
+#define STRSTD 15
+
 typedef struct process {
-	char codigo[10];
+	char codigo[CODIGO];
 	struct operation* operacao;
 	struct process* next_job;
 }Process;
@@ -23,26 +34,6 @@ typedef struct operation {
 	struct operation* next_operation;
 }Operation;
 
-// JR: 19553 : May 2022
-// Old code Phase 1
-// this was replaced by the new struct to create a binary tree
-// check struct binmachine
-//
-// 
-//
-//typedef struct machine {
-//	int codigo;
-//	int tempo;
-//	struct machine* next_machine;
-//}Machine;
-
-
-// JR: 19553 : May 2022
-//
-// New struct
-// Binary tree by time
-// ( in order to easily check the best path )
-//
 
 typedef struct binmachine
 {
@@ -52,7 +43,6 @@ typedef struct binmachine
 	struct binmachine* binmachine_less;
 
 }Bin_Machine;
-
 
 /*
 Estas tabelas são tabelas de suporte para carregamento de dados informativos sobre:
@@ -72,28 +62,44 @@ São de preenchimento facultativo ( não estavam incluidas no projeto) mas fornece
 
 typedef struct machine_type {
 	int codigo;
-	char descricao[50];
+	char descricao[DESCRICAO];
 	struct machine_type* next_type;
 }Machine_Type;
 
 typedef struct machine_table {
 	int codigo;
-	char descricao[50];
+	char descricao[DESCRICAO];
 	int machinetype;
 	struct machine_table* next_machine;
 }Machine_Table;
 
 typedef struct operations_table {
 	int codigo;
-	char descricao[50];
+	char descricao[DESCRICAO];
 	struct operations_table* next_operation;
 }Operations_Table;
 
 typedef struct processplan_table {
-	char codigo[10];
-	char descricao[50];
+	char codigo[CODIGO];
+	char descricao[DESCRICAO];
 	struct processplan_table* next_process;
 }ProcessPlan_Table;
+
+typedef struct HashTable {
+	int key;
+	Process* job;
+}HashTable;
+
+struct HashTable HashTableJob[HASHMAX];
+
+typedef struct Cell {
+	char process[CODIGO];
+	int operation;
+}cell;
+
+cell escalation[MAQUINAS][TIMESLOTS];
+
+int seq[MAXOP][2];
 
 #pragma endregion
 

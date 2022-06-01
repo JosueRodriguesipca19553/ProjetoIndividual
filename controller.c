@@ -1,11 +1,9 @@
 /**
 * author: Josué - Aluno 19553
 * email: a19553@alunos.ipca.pt
-* date: 31-03-2022
+* date: 31-05-2022
 * desc: Controller
 */
-
-#pragma once
 
 #pragma warning( disable : 4996 )
 //Evita a utilização do _CRT_SECURE_NO_WARNINGS, desactiva avisos de segurança na compilação
@@ -132,7 +130,49 @@ Operations_Table* removeoperation(Operations_Table* table, int codigo)
 
 	return table;
 }
+/**
+* @brief Função para inicializar variaveis de sistema
+* @return VOID
+*/
+void initvar()
+{
+
+	int i;
+	for (i = 0; i < HASHMAX; i++)
+	{
+		HashTableJob[i].job = NULL;
+		HashTableJob[i].key = NULL;
+	}
+	int i2 = 0;
+	for (i = 0; i < TIMESLOTS; i++)
+	{
+		for (i2 = 0; i2 < 8; i2++)
+		{
+			strcpy(escalation[i2][i].process, "");
+			escalation[i2][i].operation = 0;
+		}
+	}
+}
+
+#pragma endregion
+
+#pragma region Funções_Hash
+
+/**
+* @brief Função para criar chave unica para as HashTables
+* @param [char] Codigo : Codigo quer será convertivo em id unico
+* @return [int] id unico
+*/
+int createkey(char* codigo)
+{
+	int tot = 0;
+	int i;
+	for (i = 0; i < strlen(codigo); i++) {
+		tot += (int)codigo[i];
+	}
+	return (tot);
 
 
+}
 
 #pragma endregion

@@ -1,11 +1,9 @@
 /**
 * author: Josué - Aluno 19553
 * email: a19553@alunos.ipca.pt
-* date: 31-03-2022
+* date: 31-05-2022
 * desc: Modelo de Dados
 */
-
-#pragma once
 
 #pragma warning( disable : 4996 )
 //Evita a utilização do _CRT_SECURE_NO_WARNINGS, desactiva avisos de segurança na compilação
@@ -203,7 +201,6 @@ Machine_Table* loadMachine_table(Machine_Table* table_machine)
 	return table_machine;
 
 }
-
 
 #pragma endregion
 
@@ -547,7 +544,71 @@ Process* Load_Grid()
 
 #pragma endregion
 
+#pragma region Funções_tabelas_HASH
 
+/**
+* @brief Função que devolve o indice na tabela HASH de um item
+* @param  [char] codigo : item a procurar
+* @return [int] index : posição do item 
+*/
+int indexhash(char* codigo)
+{
+	int index;
+	int i;
+	bool exist;
+
+	exist = false;
+
+	index = 0;
+
+	for (i = 0; i < HASHMAX; i++)
+	{
+		if (HashTableJob[i].job != NULL)
+		{
+			if (strcmp(HashTableJob[i].job->codigo, codigo) == 0)
+			{
+				index = i;
+				exist = true;
+			}
+		}
+	}
+
+	if (exist==false)
+	{
+		for (i = 0; i < HASHMAX; i++)
+		{
+			if (HashTableJob[i].job != NULL)
+			{
+				index = i+1;
+			}
+		}
+	}
+
+	return index;
+
+}
+/**
+* @brief Função que adiciona item á tabela de Hash para o jobs ( processos ) 
+* @param [Struct] Processo : grelha onde vamos ler a informação a adicionar 
+* @return [int] 200 = OK
+*/
+int addhash(Process* record)
+{
+
+	int lastindex = indexhash(record->codigo);
+	int key = createkey(record->codigo);
+
+	HashTableJob[lastindex].key = key;
+	HashTableJob[lastindex].job = record;
+	
+return 200;
+}
+
+
+
+#pragma endregion
+
+#pragma region Funções_Arvores_Binarias
 /**
 * @brief Função que preenche a grelha com base numa linha do ficheiro de texto
 * @param [St]   Grid     : Grelha que esta a ser preenchida
@@ -568,15 +629,23 @@ Process* add_record_processplan(Process* grid, char* job, int operation, int mac
 	Bin_Machine* machine_record = NULL;
 	machine_record = load_record_machine(machine, time); // gera o registo para as maquinas
 
+
 	grid = add_job(grid, record);
 
 	grid = add_process(grid, job, op_record);
 
 	grid = add_machine(grid, job, operation, machine_record);
 
+	addhash(record);
+
 	return grid;
 }
-
+/**
+* @brief Função que adiciona maquinas á arvore binaria 
+* @param [Struct] Bin_machine : Arvore onde vamos inserir
+* @param [Struct] Bin_machine : Estrutura que vamos inserir
+* @return [Struct]
+*/
 Bin_Machine* add_machine_tree(Bin_Machine* tree, Bin_Machine* machine)
 {
 	Bin_Machine* aux = tree;
@@ -613,7 +682,12 @@ Bin_Machine* add_machine_tree(Bin_Machine* tree, Bin_Machine* machine)
 
 	return tree;
 }
-
+/**
+* @brief Função que adiciona jobs grelha de processos
+* @param [Struct] Processo : grelha geral de processos
+* @param [Struct] job: estrutura de jobs
+* @return [Struct]
+*/
 Process* add_job(Process* grid, Process* record)
 {
 	if (exist_processplan(grid, record->codigo) == false)
@@ -622,7 +696,6 @@ Process* add_job(Process* grid, Process* record)
 		{
 			grid = record;
 			grid->operacao = NULL;
-			//grid->operacao->machine = NULL;
 		}
 		else
 		{
@@ -633,12 +706,17 @@ Process* add_job(Process* grid, Process* record)
 			}
 			aux->next_job = record;
 			aux->next_job->operacao = NULL;
-			//aux->next_job->operacao->machine = NULL;
 		}
 	}
 	return grid;
 }
-
+/**
+* @brief Função que adiciona processo grelha de processos
+* @param [Struct] Processo : grelha geral de processos
+* @param [char] job : Job onde será incluia a maquina
+* @param [Struct] op_record : estrutura de operações
+* @return [Struct] 
+*/
 Process* add_process(Process* grid, char* job, Operation* op_record)
 {
 	Process* aux_op = grid;
@@ -654,6 +732,7 @@ Process* add_process(Process* grid, char* job, Operation* op_record)
 			aux = op_record;
 			aux->machine = NULL;
 			aux->next_operation = NULL;
+			aux_op->operacao = aux;
 		}
 		else
 		{
@@ -664,12 +743,19 @@ Process* add_process(Process* grid, char* job, Operation* op_record)
 			aux->next_operation = op_record;
 			aux->next_operation->machine = NULL;
 		}
-		aux_op->operacao = aux;
+		
 	}
-	
-	return aux_op;
-}
 
+	return grid;
+}
+/**
+* @brief Função que adiciona maquina á estrutura de arvore binaria na grelha de processos
+* @param [Struct] Processo : grelha geral de processos
+* @param [char] job : Job onde será incluia a maquina
+* @param [int] operation : operação onde será incluida a maquina
+* @param [Struct] Bin_Machine : arvore binaria de maquinas
+* @return [Struct]
+*/
 Process* add_machine(Process* grid, char* job, int operation, Bin_Machine* machine_record)
 {
 	Process* aux_jb = grid;
@@ -697,7 +783,9 @@ Process* add_machine(Process* grid, char* job, int operation, Bin_Machine* machi
 	}
 	
 	aux_op->machine = tree;
-	aux_jb->operacao = aux_op;
+	//aux_jb->operacao = aux_op;
 
 	return grid;
 }
+
+#pragma endregion
